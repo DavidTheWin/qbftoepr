@@ -1,0 +1,32 @@
+QBF to EPR
+
+This is a program that converts a QBF in QDIMACS[1] format into EPR (Effectively propositional logic) and outputs this in the TPTP CNF[2] format.
+
+To build run
+> make qbftoepr
+
+This requires the lib.ml file from iprover[3]
+This can be ran as an executable using the following arguments:
+-i filename: required
+-o filename: optional, if not supplied output to stdout
+-d dependency_scheme: optional, if not supplied default to trivial, valid options are 'standard'
+--help: prints this text then exits
+--debug: prints debug messages to stdout
+
+An example run command:
+./qbftoepr -i qdimacs/problem.qdimacs -o tptp/problem.p -d standard --debug
+
+Currently supports two dependency schemes, the trivial scheme and the standard scheme[4].
+The trivial scheme says that an existential variable depends on all the variables that were universally quantified before it.
+The standard scheme says that an existential variable depends on all the variables that were universally quantified before it that also appear in a clause with the variable.
+
+Tests can be batch build by running maketests.sh then ran using runtests.sh. Detailed output will be recorded in the ./test_reports folder.
+
+runqbfsat.sh runs one file through qbftoepr then through iprover to determine its satisfiability. iprover's output can be read in ./iproverout
+qbfdirtoeprsat.sh runs a directory of files through qbftoepr then through iprover to determine their satisfiability. iprover's output can be read in ./iproverout and timed logs can be read in ./logs
+qbfdirtoepr.sh runs a directory of files through qbftoepr. Timed logs can be read in ./logs
+
+[1] http://www.qbflib.org/qdimacs.html
+[2] http://www.cs.miam.edu/~tptp/
+[3] https://gitlab.com/korovin/iprover
+[4] https://www.ac.tuwien.ac.at/files/pub/SamerSzeider09a.pdf
